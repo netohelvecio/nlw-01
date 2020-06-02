@@ -25,6 +25,7 @@ module.exports = {
     'import/prefer-default-export': 'off',
     'no-useless-constructor': 'off',
     'no-empty-function': 'off',
-    'class-methods-use-this': 'off'
+    'class-methods-use-this': 'off',
+    'import/extensions': 'off',
   },
 };
