@@ -1,7 +1,5 @@
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 
-require('dotenv').config();
-
 class DatabaseConfig {
   public getTypeOrmConfig(): TypeOrmModuleOptions {
     return {
@@ -11,12 +9,10 @@ class DatabaseConfig {
       username: process.env.POSTGRES_USER,
       password: process.env.POSTGRES_PASSWORD,
       database: process.env.POSTGRES_DATABASE,
-      entities: [],
-      migrationsTableName: 'migrations',
-      migrations: ['src/database/migrations/*.ts'],
-      cli: {
-        migrationsDir: 'src/database/migrations',
-      },
+      synchronize: true,
+      dropSchema: false,
+      logging: true,
+      entities: ['dist/**/*.entity{.ts,.js}'],
     };
   }
 }
