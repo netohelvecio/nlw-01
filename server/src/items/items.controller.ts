@@ -39,19 +39,21 @@ export class ItemsController {
     return res.status(HttpStatus.CREATED).json(result);
   }
 
-  @Get('/items/:id')
-  async findOneItem(@Param('id') id: number, @Res() res: Response) : Promise<any> {
-    const item = await this.itemsService.findOne(id);
+  @Get('/items')
+  async findOneItem(@Res() res: Response) : Promise<any> {
+    const items = await this.itemsService.findAll();
 
-    if (!item) {
-      return res.status(HttpStatus.NOT_FOUND).json({ error: 'Item não encontrado.' });
+    if (!items.length) {
+      return res.status(HttpStatus.NOT_FOUND).json({ error: 'Nenhum item encontrado.' });
     }
 
-    return res.status(HttpStatus.CREATED).json(item);
+    const serializedItems = items.map((item) => ({ ...item, image_url: `${process.env.BASE_URL}image/${item.image}` }));
+
+    return res.status(HttpStatus.OK).json(serializedItems);
   }
 
   @Get('/image/:image')
   async getImage(@Param('image') image: string, @Res() res: Response) : Promise<any> {
-    return res.sendFile(image, { root: 'uploads' }, (err) => res.status(HttpStatus.NOT_FOUND).json(err));
+    return res.sendFile(image, { root: 'uploads' });
   }
 }
