@@ -2,9 +2,8 @@ import {
   Controller, Post, Body, UseInterceptors, UploadedFile, Res, HttpStatus, Get, Param,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
-import { extname } from 'path';
 import { Response } from 'express';
+import { diskStorageConfig } from 'src/utils/diskStorage';
 import { CreateItemDto } from './createItem.dto';
 import { ItemsService } from './items.service';
 
@@ -14,14 +13,7 @@ export class ItemsController {
 
   @Post('/items')
   @UseInterceptors(FileInterceptor('image', {
-    storage: diskStorage({
-      destination: './uploads',
-      filename: (req, file, cb) => {
-        const filename = file.originalname.replace(/\.[^.]*$/, '');
-
-        cb(null, `${filename}${Date.now()}${extname(file.originalname)}`);
-      },
-    }),
+    storage: diskStorageConfig,
   }))
   async createItem(
     @UploadedFile() file: any,

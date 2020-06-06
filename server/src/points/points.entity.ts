@@ -18,8 +18,8 @@ export class Points {
   })
   email: string
 
-  @Column({ type: 'int', nullable: false })
-  whatsapp: number
+  @Column({ type: 'varchar', length: 14, nullable: false })
+  whatsapp: string
 
   @Column({ type: 'decimal', nullable: false })
   latitude: number
