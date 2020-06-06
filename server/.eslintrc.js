@@ -21,11 +21,13 @@ module.exports = {
     '@typescript-eslint/interface-name-prefix': 'off',
     '@typescript-eslint/explicit-function-return-type': 'off',
     '@typescript-eslint/no-explicit-any': 'off',
+    '@typescript-eslint/explicit-module-boundary-types': 'off',
     'import/no-unresolved': 'off',
     'import/prefer-default-export': 'off',
     'no-useless-constructor': 'off',
     'no-empty-function': 'off',
     'class-methods-use-this': 'off',
     'import/extensions': 'off',
+    'import/no-extraneous-dependencies': 'off',
   },
 };

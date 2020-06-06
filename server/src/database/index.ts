@@ -3,6 +3,7 @@ import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 class DatabaseConfig {
   public getTypeOrmConfig(): TypeOrmModuleOptions {
     return {
+      name: 'PostgresConn',
       type: 'postgres',
       host: process.env.POSTGRES_HOST,
       port: Number(process.env.POSTGRES_PORT),
