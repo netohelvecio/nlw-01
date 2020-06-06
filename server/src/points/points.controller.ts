@@ -1,5 +1,5 @@
 import {
-  Controller, Post, UploadedFile, UseInterceptors, Body, Res, HttpStatus,
+  Controller, Post, UploadedFile, UseInterceptors, Body, Res, HttpStatus, Get, Param, Query,
 } from '@nestjs/common';
 import { Response } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
@@ -21,9 +21,9 @@ export class PointsController {
     @Res() res: Response,
   ): Promise<any> {
     const {
-      city, email, latitude, longitude, name, uf, whatsapp,
+      city, email, latitude, longitude, name, uf, whatsapp, items, image,
     } = createPointDto;
-    const { filename } = file;
+    // const { filename = null } = file;
 
     const emailExists = await this.pointsService.findEmail(email);
 
@@ -36,10 +36,11 @@ export class PointsController {
       email,
       name,
       uf,
-      image: filename,
-      latitude: Number(latitude),
-      longitude: Number(longitude),
+      image,
+      latitude,
+      longitude,
       whatsapp,
+      items,
     });
 
     if (!point) {
@@ -47,5 +48,30 @@ export class PointsController {
     }
 
     return res.status(HttpStatus.CREATED).json(point);
+  }
+
+  @Get('/points/:id')
+  async findOnePoint(@Param('id') id: number, @Res() res: Response): Promise<any> {
+    const point = await this.pointsService.getOnePoint(id);
+
+    if (!point) {
+      return res.status(HttpStatus.NOT_FOUND).json({ error: 'Ponto de coleta não encontrado.' });
+    }
+
+    return res.status(HttpStatus.OK).json(point);
+  }
+
+  @Get('/points')
+  async searchPoint(
+    @Query('city') city: string,
+    @Query('uf') uf: string,
+    @Query('items') items: string,
+    @Res() res: Response,
+  ): Promise<any> {
+    const parsedItems = items.split(',').map((item) => Number(item.trim()));
+
+    const points = await this.pointsService.getPointWithFilter(uf, city, parsedItems);
+
+    return res.status(HttpStatus.OK).json(points);
   }
 }

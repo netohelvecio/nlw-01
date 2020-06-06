@@ -1,6 +1,7 @@
 import {
-  IsNotEmpty, IsString, MaxLength, IsEmail, IsNumber, IsLatitude, IsLongitude,
+  IsNotEmpty, IsString, MaxLength, IsEmail, IsNumber, IsLatitude, IsLongitude, IsArray,
 } from 'class-validator';
+import { Items } from 'src/items/items.entity';
 
 export class CreatePointDto {
   image: string;
@@ -22,12 +23,12 @@ export class CreatePointDto {
   whatsapp: string;
 
   @IsNotEmpty()
-  // @IsNumber()
+  @IsNumber()
   @IsLatitude()
   latitude: number
 
   @IsNotEmpty()
-  // @IsNumber()
+  @IsNumber()
   @IsLongitude()
   longitude: number
 
@@ -40,4 +41,8 @@ export class CreatePointDto {
   @MaxLength(2)
   @IsNotEmpty()
   uf: string;
+
+  @IsArray()
+  @IsNotEmpty()
+  items: Items[];
 }

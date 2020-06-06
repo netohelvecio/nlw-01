@@ -1,7 +1,6 @@
 import {
-  Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, ManyToMany, JoinTable,
+  Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn,
 } from 'typeorm';
-import { Points } from 'src/points/points.entity';
 
 @Entity()
 export class Items {
@@ -23,8 +22,4 @@ export class Items {
     name: 'updated_at', type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP',
   })
   updatedAt: Date;
-
-  @ManyToMany((type) => Points, { cascade: true })
-  @JoinTable()
-  points: Points[]
 }
