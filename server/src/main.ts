@@ -1,6 +1,8 @@
 import 'dotenv/config';
 import { NestFactory } from '@nestjs/core';
 import { NestExpressApplication } from '@nestjs/platform-express';
+import express from 'express';
+import path from 'path';
 import { ValidationPipe } from '@nestjs/common';
 import { AppModule } from './app.module';
 

@@ -1,5 +1,5 @@
 import {
-  Controller, Post, Body, UseInterceptors, UploadedFile, Res, HttpStatus,
+  Controller, Post, Body, UseInterceptors, UploadedFile, Res, HttpStatus, Get, Param,
 } from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorage } from 'multer';
@@ -8,11 +8,11 @@ import { Response } from 'express';
 import { CreateItemDto } from './createItem.dto';
 import { ItemsService } from './items.service';
 
-@Controller('items')
+@Controller()
 export class ItemsController {
-  constructor(private readonly crudService: ItemsService) {}
+  constructor(private readonly itemsService: ItemsService) {}
 
-  @Post()
+  @Post('/items')
   @UseInterceptors(FileInterceptor('image', {
     storage: diskStorage({
       destination: './uploads',
@@ -23,19 +23,35 @@ export class ItemsController {
       },
     }),
   }))
-  async create(
+  async createItem(
     @UploadedFile() file: any,
     @Body() createItemDto: CreateItemDto,
     @Res() res: Response,
   ): Promise<any> {
     const data = { ...createItemDto, ...file };
 
-    const result = await this.crudService.create({ image: data.filename, title: data.title });
+    const result = await this.itemsService.create({ image: data.filename, title: data.title });
 
     if (!result) {
       return res.status(HttpStatus.BAD_REQUEST).json({ error: 'Erro ao criar item.' });
     }
 
     return res.status(HttpStatus.CREATED).json(result);
+  }
+
+  @Get('/items/:id')
+  async findOneItem(@Param('id') id: number, @Res() res: Response) : Promise<any> {
+    const item = await this.itemsService.findOne(id);
+
+    if (!item) {
+      return res.status(HttpStatus.NOT_FOUND).json({ error: 'Item não encontrado.' });
+    }
+
+    return res.status(HttpStatus.CREATED).json(item);
+  }
+
+  @Get('/image/:image')
+  async getImage(@Param('image') image: string, @Res() res: Response) : Promise<any> {
+    return res.sendFile(image, { root: 'uploads' }, (err) => res.status(HttpStatus.NOT_FOUND).json(err));
   }
 }

@@ -16,4 +16,8 @@ export class ItemsService {
 
     return this.itemRepository.save({ image, title });
   }
+
+  async findOne(id: number): Promise<Items> {
+    return this.itemRepository.findOne(id);
+  }
 }
