@@ -3,7 +3,8 @@ import { createGlobalStyle } from 'styled-components';
 import 'react-toastify/dist/ReactToastify.css';
 
 export default createGlobalStyle`
-  @import url('https://fonts.googleapis.com/css?family=Roboto:400,700&display=swap');
+  @import url('https://fonts.googleapis.com/css2?family=Roboto&family=Ubuntu:wght@700&display=swap');
+
   * {
     margin: 0;
     padding: 0;
@@ -27,12 +28,12 @@ export default createGlobalStyle`
   }
 
   body, input, button, textarea {
-    font-family: ${(props) => props.theme.font.family};
+    font-family: ${(props) => props.theme.font.roboto};
   }
 
   h1, h2, h3, h4, h5, h6 {
     color: ${(props) => props.theme.colors.titleColor};
-    font-family: ${(props) => props.theme.font.family};
+    font-family: ${(props) => props.theme.font.ubuntu};
   }
 
   a {

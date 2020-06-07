@@ -4,9 +4,11 @@ export default {
     titleColor: '#322153',
     textColor: '#6C6C80',
     backgroundColor: '#F0F0F5',
+    hoverButton: '#2FB86E',
   },
 
   font: {
-    family: `'Roboto', 'Arial', 'Helvetica', 'sans-serif'`,
+    roboto: `'Roboto', 'Arial', 'Helvetica', 'sans-serif'`,
+    ubuntu: `'Ubuntu', 'Arial', 'Helvetica', 'sans-serif'`,
   },
 };

@@ -7,10 +7,12 @@ declare module 'styled-components' {
       titleColor: string;
       textColor: string;
       backgroundColor: string;
+      hoverButton: string;
     };
 
     font: {
-      family: string;
+      roboto: string;
+      ubuntu: string;
     };
   }
 }
