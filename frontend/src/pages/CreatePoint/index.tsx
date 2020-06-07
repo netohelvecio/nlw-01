@@ -1,8 +1,14 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { Map, TileLayer, Marker } from 'react-leaflet';
 import { FiArrowLeft } from 'react-icons/fi';
 import { NavLink } from 'react-router-dom';
 import { ThemeContext } from 'styled-components';
+import { toast } from 'react-toastify';
+
+import api from '../../services/api';
+import { Items } from '../../@types';
+
+import Loading from '../../components/Loading';
 
 import {
   Container,
@@ -18,7 +24,24 @@ import {
 import logo from '../../assets/logo.svg';
 
 const CreatePoint: React.FC = () => {
+  const [items, setItems] = useState<Items[]>([]);
+  const [loading, setLoading] = useState(false);
   const { colors } = useContext(ThemeContext);
+
+  useEffect(() => {
+    setLoading(true);
+
+    api
+      .get('items')
+      .then((response) => {
+        setItems(response.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        toast.error(err.response.data.message ?? 'Erro ao listar items!');
+        setLoading(false);
+      });
+  }, []);
 
   return (
     <Container>
@@ -95,55 +118,18 @@ const CreatePoint: React.FC = () => {
             <span>Selecione um ou mais ítens abaixo</span>
           </legend>
 
-          <ItemsList>
-            <Item selected>
-              <img
-                src="http://localhost:3333/image/oleo1591428141043.svg"
-                alt="oleo"
-              />
-              <span>Óleo</span>
-            </Item>
-
-            <Item>
-              <img
-                src="http://localhost:3333/image/oleo1591428141043.svg"
-                alt="oleo"
-              />
-              <span>Óleo</span>
-            </Item>
-
-            <Item>
-              <img
-                src="http://localhost:3333/image/oleo1591428141043.svg"
-                alt="oleo"
-              />
-              <span>Óleo</span>
-            </Item>
-
-            <Item>
-              <img
-                src="http://localhost:3333/image/oleo1591428141043.svg"
-                alt="oleo"
-              />
-              <span>Óleo</span>
-            </Item>
-
-            <Item>
-              <img
-                src="http://localhost:3333/image/oleo1591428141043.svg"
-                alt="oleo"
-              />
-              <span>Óleo</span>
-            </Item>
-
-            <Item>
-              <img
-                src="http://localhost:3333/image/oleo1591428141043.svg"
-                alt="oleo"
-              />
-              <span>Óleo</span>
-            </Item>
-          </ItemsList>
+          {loading ? (
+            <Loading size={40} color={colors.primaryColor} />
+          ) : (
+            <ItemsList>
+              {items.map((item) => (
+                <Item key={item.id.toString()}>
+                  <img src={item.image_url} alt={item.title} />
+                  <span>{item.title}</span>
+                </Item>
+              ))}
+            </ItemsList>
+          )}
         </fieldset>
 
         <ButtonSubmit type="submit">Cadastrar ponto de coleta</ButtonSubmit>

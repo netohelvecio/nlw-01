@@ -1,8 +1,6 @@
 import styled from 'styled-components';
 
-interface IItems {
-  selected?: boolean;
-}
+import { IItemsProps } from '../../@types';
 
 export const Container = styled.div`
   width: 100%;
@@ -137,7 +135,7 @@ export const ItemsList = styled.ul`
   list-style: none;
 `;
 
-export const Item = styled.li<IItems>`
+export const Item = styled.li<IItemsProps>`
   background: ${(props) =>
     props.selected
       ? props.theme.colors.itemColorSelected
