@@ -6,6 +6,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { diskStorageConfig } from 'src/utils/diskStorage';
 import { PointsService } from './points.service';
 import { CreatePointDto } from './createPoint.dto';
+import { Points } from './points.entity';
 
 @Controller()
 export class PointsController {
@@ -21,9 +22,9 @@ export class PointsController {
     @Res() res: Response,
   ): Promise<any> {
     const {
-      city, email, latitude, longitude, name, uf, whatsapp, items, image,
+      city, email, latitude, longitude, name, uf, whatsapp, items,
     } = createPointDto;
-    // const { filename = null } = file;
+    const { filename } = file;
 
     const emailExists = await this.pointsService.findEmail(email);
 
@@ -36,7 +37,7 @@ export class PointsController {
       email,
       name,
       uf,
-      image,
+      image: filename,
       latitude,
       longitude,
       whatsapp,
@@ -65,13 +66,13 @@ export class PointsController {
   async searchPoint(
     @Query('city') city: string,
     @Query('uf') uf: string,
-    @Query('items') items: string,
+    @Query('itemId') items: number,
     @Res() res: Response,
   ): Promise<any> {
-    const parsedItems = items.split(',').map((item) => Number(item.trim()));
+    const points = await this.pointsService.getPointWithFilter(uf, city, items);
 
-    const points = await this.pointsService.getPointWithFilter(uf, city, parsedItems);
+    const serializedPoints = points.map((point) => ({ ...point, image_url: `${process.env.BASE_URL}image/${point.image}` }));
 
-    return res.status(HttpStatus.OK).json(points);
+    return res.status(HttpStatus.OK).json(serializedPoints);
   }
 }

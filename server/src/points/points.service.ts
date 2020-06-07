@@ -25,19 +25,20 @@ export class PointsService {
     return this.pointsRepository.findOne(id, { relations: ['items'] });
   }
 
-  async getPointWithFilter(uf: string, city: string, items: number[]): Promise<Points[]> {
-    const itemTest: Items = {
-      id: 4,
-      image: 'eletronicos1591428616281.svg',
-      title: 'Eletrônicos',
-      createdAt: new Date(),
-      updatedAt: new Date(),
-    };
+  async getPointWithFilter(uf: string, city: string, itemId: number): Promise<Points[]> {
+    const items = await this.pointsRepository.createQueryBuilder('points')
+      .where('points.city = :city', { city })
+      .andWhere('points.uf = :uf', { uf })
+      .leftJoinAndMapMany(
+        'points.items',
+        'points.items',
+        'items',
+        'items.id = :itemId', { itemId },
+      )
+      .getMany();
 
-    return this.pointsRepository.find({
-      relations: ['items'],
-      where: { uf, city, items },
+    const removeItemEmptys = items.filter((item) => item.items.length);
 
-    });
+    return removeItemEmptys;
   }
 }
