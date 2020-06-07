@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { FiLogIn } from 'react-icons/fi';
+import { ThemeContext } from 'styled-components';
 import { NavLink } from 'react-router-dom';
 
 import { Container, Content, Main } from './styles';
@@ -7,6 +8,8 @@ import { Container, Content, Main } from './styles';
 import logo from '../../assets/logo.svg';
 
 const Home: React.FC = () => {
+  const { colors } = useContext(ThemeContext);
+
   return (
     <Container>
       <Content>
@@ -21,9 +24,9 @@ const Home: React.FC = () => {
             Ajudamos pessoas a encontrarem pontos de coleta de forma eficiente.
           </p>
 
-          <NavLink to="/">
+          <NavLink to="/create-point">
             <span>
-              <FiLogIn color="#fff" size={20} />
+              <FiLogIn color={colors.trueWhite} size={20} />
             </span>
 
             <strong>Cadastre um ponto de coleta</strong>

@@ -30,6 +30,7 @@ module.exports = {
     'react-hooks/exhaustive-deps': 'warn',
     'react/jsx-filename-extension': [1, { extensions: ['.tsx'] }],
     'import/prefer-default-export': 'off',
+    'jsx-a11y/label-has-associated-control': 'off',
     'react/prop-types': 'off',
     'import/extensions': 'off',
     'import/no-unresolved': 'off',

@@ -8,6 +8,12 @@ declare module 'styled-components' {
       textColor: string;
       backgroundColor: string;
       hoverButton: string;
+      trueWhite: string;
+      white: string;
+      inputColor: string;
+      placeholderColor: string;
+      itemColor: string;
+      itemColorSelected: string;
     };
 
     font: {
