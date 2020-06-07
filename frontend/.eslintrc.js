@@ -31,6 +31,8 @@ module.exports = {
     'react/jsx-filename-extension': [1, { extensions: ['.tsx'] }],
     'import/prefer-default-export': 'off',
     'react/prop-types': 'off',
+    'import/extensions': 'off',
+    'import/no-unresolved': 'off',
     'no-unused-expressions': 'off',
     'react/jsx-props-no-spreading': 'off',
     '@typescript-eslint/camelcase': 'off',
@@ -38,14 +40,6 @@ module.exports = {
       'error',
       {
         allowExpressions: true,
-      },
-    ],
-    'import/extensions': [
-      'error',
-      'ignorePackages',
-      {
-        ts: 'never',
-        tsx: 'never',
       },
     ],
   },
