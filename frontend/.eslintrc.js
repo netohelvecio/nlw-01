@@ -38,11 +38,6 @@ module.exports = {
     'no-unused-expressions': 'off',
     'react/jsx-props-no-spreading': 'off',
     '@typescript-eslint/camelcase': 'off',
-    '@typescript-eslint/explicit-function-return-type': [
-      'error',
-      {
-        allowExpressions: true,
-      },
-    ],
+    '@typescript-eslint/explicit-function-return-type': 'off',
   },
 };

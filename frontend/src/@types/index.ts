@@ -15,3 +15,11 @@ export interface ILoadingProps {
   color: string;
   size: number;
 }
+
+export interface IBGEResponse {
+  sigla: string;
+}
+
+export interface IBGEResponseCity {
+  nome: string;
+}

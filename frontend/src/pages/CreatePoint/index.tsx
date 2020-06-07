@@ -1,12 +1,13 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useState, useEffect, ChangeEvent } from 'react';
 import { Map, TileLayer, Marker } from 'react-leaflet';
 import { FiArrowLeft } from 'react-icons/fi';
 import { NavLink } from 'react-router-dom';
 import { ThemeContext } from 'styled-components';
 import { toast } from 'react-toastify';
+import axios from 'axios';
 
 import api from '../../services/api';
-import { Items } from '../../@types';
+import { Items, IBGEResponse, IBGEResponseCity } from '../../@types';
 
 import Loading from '../../components/Loading';
 
@@ -26,6 +27,9 @@ import logo from '../../assets/logo.svg';
 const CreatePoint: React.FC = () => {
   const [items, setItems] = useState<Items[]>([]);
   const [loading, setLoading] = useState(false);
+  const [ufs, setUfs] = useState<string[]>([]);
+  const [citys, setCitys] = useState<string[]>([]);
+  const [selectedUf, setSelectedUf] = useState('');
   const { colors } = useContext(ThemeContext);
 
   useEffect(() => {
@@ -42,6 +46,40 @@ const CreatePoint: React.FC = () => {
         setLoading(false);
       });
   }, []);
+
+  useEffect(() => {
+    axios
+      .get<IBGEResponse[]>(
+        'https://servicodados.ibge.gov.br/api/v1/localidades/estados?orderBy=nome'
+      )
+      .then((response) => {
+        const ufsFormatted = response.data.map((uf) => uf.sigla);
+
+        setUfs(ufsFormatted);
+      })
+      .catch((err) => {
+        toast.error(err.response.data.error ?? 'Erro ao listas estados!');
+      });
+  });
+
+  useEffect(() => {
+    axios
+      .get<IBGEResponseCity[]>(
+        `https://servicodados.ibge.gov.br/api/v1/localidades/estados/${selectedUf}/municipios`
+      )
+      .then((response) => {
+        const citysFormatted = response.data.map((city) => city.nome);
+
+        setCitys(citysFormatted);
+      })
+      .catch((err) => {
+        toast.error(err.response.data.error ?? 'Erro ao listas cidades!');
+      });
+  }, [selectedUf]);
+
+  function handleSelectedUf(event: ChangeEvent<HTMLSelectElement>) {
+    setSelectedUf(event.target.value);
+  }
 
   return (
     <Container>
@@ -98,8 +136,18 @@ const CreatePoint: React.FC = () => {
           <FieldGroup>
             <Field>
               <label htmlFor="uf">Estado</label>
-              <select name="uf" id="uf">
+              <select
+                name="uf"
+                id="uf"
+                onChange={handleSelectedUf}
+                value={selectedUf}
+              >
                 <option value="0">Selecione um estado</option>
+                {ufs.map((uf) => (
+                  <option key={uf} value={uf}>
+                    {uf}
+                  </option>
+                ))}
               </select>
             </Field>
 
@@ -107,6 +155,11 @@ const CreatePoint: React.FC = () => {
               <label htmlFor="city">Cidade</label>
               <select name="city" id="city">
                 <option value="0">Selecione uma cidade</option>
+                {citys.map((city) => (
+                  <option key={city} value={city}>
+                    {city}
+                  </option>
+                ))}
               </select>
             </Field>
           </FieldGroup>
